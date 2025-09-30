@@ -7,7 +7,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-white shadow-sm rounded-b-2xl px-4 py-2 flex items-center justify-between">
+    <nav className="w-full bg-white shadow-sm rounded-b-2xl px-4 py-2 flex items-center justify-between absolute top-0">
       {/* Left - Logo & Hamburger */}
       <div className="flex items-center gap-3">
         <button className="lg:hidden text-gray-600 hover:text-indigo-600 transition">
