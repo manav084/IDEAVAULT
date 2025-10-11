@@ -4,9 +4,9 @@ import User from '@/models/User';
 import { NextResponse } from 'next/server';
 export async function POST(req, res) {
     try{
-        const {name, email, passwordHash,role, badges} = await req.json();
+        const {username,name, email, password} = await req.json();
         await dbConnect();
-        const user = await User.create({name, email, passwordHash, role, badges})
+        const user = await User.create({username,name, email, password})
 
         return NextResponse.json({
             success:true,
