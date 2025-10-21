@@ -1,4 +1,3 @@
-// import dbConnect from '@/lib/mongoose'
 import dbConnect from '@/lib/mongoose'
 import User from '@/models/User'
 
