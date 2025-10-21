@@ -9,23 +9,11 @@ import { NavigationMenuDemo } from "@/components/Header";
 
 export default function Home() {
   return (
-    <div>
-      {/* Navigation Header */}
-      {/* <header className="fixed top-0 w-full bg-background border-b z-50">
-      
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-xl font-bold">IdeaVault</div>
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="/signin" className="text-sm hover:underline">Sign In</Link>
-            <Link href="/signup" className="text-sm hover:underline">Sign Up</Link>
-            <ModeToggle />
-          </div>
-        </div>
-      </header> */}
-
+    <div>``
+    
       {/* Hero Section */}
-      <main className="pt-20">
-        <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      <main className="pt-10">
+        <section className="min-h-screen flex items-center justify-center bg-background">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to IdeaVault</h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8">Store, organize, and collaborate on your ideas securely.</p>

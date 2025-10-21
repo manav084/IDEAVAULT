@@ -41,4 +41,4 @@ export async function middleware(req){
     }
 }
 
-export const config = {matcher:["/admin/*"]}
+export const config = {matcher:["/admin"]}

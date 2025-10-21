@@ -8,14 +8,18 @@ import { Label } from "@/components/ui/label";
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen flex items-center justify-center 
+      bg-background
+    p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create Account</CardTitle>
           <CardDescription>Enter your details to create your account</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
+       <CardContent>
+        <form>
+          <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
             <Label htmlFor="name">Full Name</Label>
             <Input
               id="name"
@@ -24,16 +28,16 @@ export default function SignUpPage() {
               required
             />
           </div>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="name@example.com"
-              required
-            />
-          </div>
-          <div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+              />
+            </div>
+           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
@@ -42,7 +46,7 @@ export default function SignUpPage() {
               required
             />
           </div>
-          <div>
+          <div className="grid gap-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
               id="confirmPassword"
@@ -51,7 +55,9 @@ export default function SignUpPage() {
               required
             />
           </div>
-        </CardContent>
+          </div>
+        </form>
+      </CardContent>
         <CardFooter className="justify-center">
           <Button className="w-full">Sign Up</Button>
         </CardFooter>

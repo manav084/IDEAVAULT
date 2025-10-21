@@ -24,13 +24,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <NavigationMenuDemo/>
           <ThemeProvider 
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange>
 
+              <NavigationMenuDemo/>
         {children}
           </ThemeProvider>
       </body>
