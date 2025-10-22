@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,8 +9,14 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 export default function SignInPage() {
+  
+  const [fData, setfData] = useState({email:"",password:""})
 
-  const [uData, setuData] = useState({email:"",password:""})
+  const handleChange = (e) => { setfData({...fData,[e.target.id]:e.target.value}) }
+  const handleSubmit = (e) => { 
+    e.preventDefault()
+    console.log(fData)
+   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
@@ -18,14 +25,15 @@ export default function SignInPage() {
           <CardTitle>Welcome Back</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
+        <form onSubmit={handleSubmit}>
         <CardContent>
-        <form>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
+                onChange={handleChange}
                 placeholder="m@example.com"
                 required
               />
@@ -40,14 +48,14 @@ export default function SignInPage() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" onChange={handleChange} required />
             </div>
           </div>
-        </form>
       </CardContent>
-        <CardFooter className="justify-center">
+        <CardFooter className="justify-center pt-6">
           <Button className="w-full">Sign In</Button>
         </CardFooter>
+        </form>
         <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">
             Don't have an account?{" "}
