@@ -18,6 +18,7 @@ export default function SignUpPage() {
   
   const [fData, setFData] = useState({
     name: "",
+    username:"",
     email: "",
     password: "",
     confirmPassword: "",
@@ -44,18 +45,38 @@ export default function SignUpPage() {
 
       else seterr("")
    }
-
-  const handleSubmit =(e) => { 
+async (params) => {
+  
+}
+  const  handleSubmit = async (e) => { 
     e.preventDefault()
-    console.log(fData);
+    // console.log(fData);
+    try{
+
+    const response =  await fetch(`/api/signup`,{method:"POST",headers:{"Content-Type":"application/json"}, body:JSON.stringify(
+        {
+        "name":fData.name,
+        "username":fData.username,
+        "email":fData.email,
+        "password":fData.password
+        }
         
-   }
+    )})
+    const data =  await response.json()   
+    console.log(data);
+    
+  }catch(error){
+      console.error(error)
+      console.log(error);
+      
+  }
+  }
 
   return (
     <div
       className="min-h-screen flex items-center justify-center 
       bg-background
-    p-4"
+    p-8"
     >
       <Card className="w-full max-w-md">
         <CardHeader>
@@ -74,7 +95,18 @@ export default function SignUpPage() {
                   type="name"
                   onChange={handleChange}
                   value={fData.name}
-                  placeholder="John Doe"
+                  placeholder="Manav Pandey"
+                  required
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="username">User Name</Label>
+                <Input
+                  id="username"
+                  type="username"
+                  onChange={handleChange}
+                  value={fData.username}
+                  placeholder="manav_pandey02"
                   required
                 />
               </div>
@@ -85,7 +117,7 @@ export default function SignUpPage() {
                   type="email"
                   onChange={handleChange}
                   value={fData.email}
-                  placeholder="m@example.com"
+                  placeholder="mp@example.com"
                   required
                 />
               </div>

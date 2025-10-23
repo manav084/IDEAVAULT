@@ -13,9 +13,28 @@ export default function SignInPage() {
   const [fData, setfData] = useState({email:"",password:""})
 
   const handleChange = (e) => { setfData({...fData,[e.target.id]:e.target.value}) }
-  const handleSubmit = (e) => { 
+  const handleSubmit = async (e) => { 
     e.preventDefault()
     console.log(fData)
+     try{
+
+    const response =  await fetch(`/api/signin`,{method:"POST",headers:{"Content-Type":"application/json"}, body:JSON.stringify(
+        {
+  
+        "email":fData.email,
+        "password":fData.password
+        }
+        
+    )})
+    const data =  await response.json()   
+    console.log(data);
+    
+  }catch(error){
+      console.error(error)
+      console.log(error);
+      
+  }
+  
    }
 
   return (
