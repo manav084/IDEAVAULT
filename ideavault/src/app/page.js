@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { ModeToggle } from "@/components/ModeToggle";
 import { LightbulbIcon, UsersIcon, SearchIcon, ShieldIcon } from "lucide-react";
 import { NavigationMenuDemo } from "@/components/Header";
+import { AppSidebar } from "@/components/Sidebar";
 
 export default function Home() {
   return (
