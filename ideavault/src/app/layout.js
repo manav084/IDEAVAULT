@@ -2,7 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NavigationMenuDemo } from "@/components/Header";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,11 +30,8 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange>
 
-              <SidebarProvider>
               <NavigationMenuDemo/>
-                 <SidebarTrigger />
            {children}
-              </SidebarProvider>
           </ThemeProvider>
       </body>
     </html>
