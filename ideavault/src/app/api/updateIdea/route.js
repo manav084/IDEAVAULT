@@ -7,10 +7,10 @@ export async function PUT(req,res) {
 
 
     try {
-        const {title,description,category,tags,votes,id} = await req.json()
+        const {title,description,category,tags,id} = await req.json()
         await dbConnect()
 
-        const idea = await Idea.findByIdAndUpdate(id, {title,description,category,tags,votes})
+        const idea = await Idea.findByIdAndUpdate(id, {title,description,category,tags})
 
         return NextResponse.json({
             success:true,
