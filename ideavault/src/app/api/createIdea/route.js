@@ -5,11 +5,11 @@ import { NextResponse } from "next/server";
 
 export async function POST(req,res){
     try {
-        const {title,description,category,tags,votes} = await req.json()
+        const {title,description,category,tags} = await req.json()
 
 
         await dbConnect()
-        const idea = await Idea.create({title,description,category,tags,votes})
+        const idea = await Idea.create({title,description,category,tags})
 
         return NextResponse.json({
             success: true,

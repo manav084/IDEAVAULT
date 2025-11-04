@@ -17,6 +17,11 @@
 /.next/
 /out/
 
+# gemini and todo
+
+../GEMINI.md
+../todo.md
+
 # production
 /build
 

@@ -2,10 +2,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NavigationMenuDemo } from "@/components/Header";
-<<<<<<< HEAD
-=======
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
->>>>>>> 3196891116969e000d1cb9e668d11e9f5ebc6d95
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,6 +20,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+       <head>
+        <script
+          async
+          crossOrigin="anonymous"
+          src="https://tweakcn.com/live-preview.min.js"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
@@ -34,15 +37,8 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange>
 
-              <SidebarProvider>
-              <NavigationMenuDemo/>
-<<<<<<< HEAD
+             <NavigationMenuDemo/>
            {children}
-=======
-                 <SidebarTrigger />
-           {children}
-              </SidebarProvider>
->>>>>>> 3196891116969e000d1cb9e668d11e9f5ebc6d95
           </ThemeProvider>
       </body>
     </html>

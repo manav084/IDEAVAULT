@@ -109,7 +109,7 @@ export function NavigationMenuDemo() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-            <Link href="/docs">Docs</Link>
+            <Link href="/ideas">Ideas</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem className="hidden md:block">
