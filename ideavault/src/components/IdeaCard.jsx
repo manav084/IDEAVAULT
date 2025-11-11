@@ -56,6 +56,7 @@ const IdeaCard = ({ idea }) => {
     <Card>
       <CardHeader className={' cursor-pointer text-3xl'} onClick={handleTitleClick}>
         <CardTitle >{idea.title}</CardTitle>
+      <CardTitle >{idea.createdBy?.username}</CardTitle>
       </CardHeader>
       <CardContent>
         <p>{idea.description}</p>

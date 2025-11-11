@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function GET(req,res) {
     try {
         await dbConnect()
-        const Ideas = await Idea.find({})
+        const Ideas = await Idea.find({}).populate('createdBy', 'username')
         return NextResponse.json({
             succes:true,
             data:Ideas,

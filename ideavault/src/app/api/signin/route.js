@@ -11,6 +11,7 @@ const secret = new TextEncoder().encode(
 export async function POST(req){
  try {
      const {email,password} = await req.json()
+     await dbConnect()
      const verifyEmail =  await User.findOne({email})
  
      if(!verifyEmail){
@@ -37,8 +38,9 @@ export async function POST(req){
             })
         }
         const payload = {
+            userId:verifyEmail._id.toString(),
             user: verifyEmail.username,
-             role: verifyEmail.role
+            role: verifyEmail.role
 
         }
         const alg = "HS256"

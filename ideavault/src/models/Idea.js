@@ -22,10 +22,15 @@ const ideaSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    dislikes:{
+    dislikes: {
       type: Number,
       default: 0,
-    }
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // This creates the link to the User model
+      required: true,
+    },
   },
   { timestamps: true }
 );
