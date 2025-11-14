@@ -1,9 +1,10 @@
 import dbConnect from "@/lib/mongoose";
 import Idea from "@/models/Idea";
+import User from "@/models/User";
 import { NextResponse } from "next/server";
 
 
-export async function GET(req,res) {
+export async function GET(req) {
     try {
         await dbConnect()
         const Ideas = await Idea.find({}).populate('createdBy', 'username')
@@ -16,7 +17,7 @@ export async function GET(req,res) {
         console.log(error);
         return NextResponse.json({
             success:false,
-            message:"Cant"
+            message:error.message
         })
         
         

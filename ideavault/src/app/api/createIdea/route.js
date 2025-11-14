@@ -15,6 +15,7 @@ export async function POST(req,res){
         const cookieStore = await cookies()        
         const userToken = cookieStore.get('token').value
 
+
         const {payload} = await jose.jwtVerify(userToken,secret)
         console.log(payload)
         const {title,description,category,tags} = await req.json()
