@@ -7,87 +7,107 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Star, ThumbsUp, ThumbsDown } from "lucide-react";
+import { ThumbsUp, ThumbsDown, CalendarDays, UserCircle, MessageSquare } from "lucide-react";
 import Container from "@/components/Container";
-
-const StarRating = ({ value, onChange, label }) => {
-  return (
-    <div className="flex items-center gap-2">
-      <span className="font-medium text-lg">{label}:</span>
-      <div className="flex items-center">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <Star
-            key={star}
-            className={`cursor-pointer h-7 w-7 ${
-              star <= value ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-            }`}
-            onClick={() => onChange(star)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+import { Textarea } from "@/components/ui/textarea";
 
 export default function IdeaDetailPage() {
   const { id } = useParams();
   const [idea, setIdea] = useState(null);
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [impactRating, setImpactRating] = useState(0);
-  const [feasibilityRating, setFeasibilityRating] = useState(0);
+  const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
     if (id) {
-      const fetchIdea = async () => {
+      const fetchIdeaAndComments = async () => {
         try {
-          const res = await fetch(`/api/admin/getIdea/${id}`);
-          const data = await res.json();
-          setIdea(data.data);
+          // Fetch idea
+          const ideaRes = await fetch(`/api/admin/getIdea/${id}`);
+          const ideaData = await ideaRes.json();
+          setIdea(ideaData.data);
+
+          // Fetch comments
+          const commentsRes = await fetch(`/api/getComments/${id}`);
+          const commentsData = await commentsRes.json();
+          if (commentsData.success) {
+            setComments(commentsData.data);
+          }
+
         } catch (error) {
-          console.error("Failed to fetch idea:", error);
+          console.error("Failed to fetch idea or comments:", error);
         } finally {
           setLoading(false);
         }
       };
-      fetchIdea();
+      fetchIdeaAndComments();
     }
   }, [id]);
+
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return;
+
+    try {
+      const res = await fetch("/api/addComment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ideaId: id, text: newComment }),
+      });
+
+      const result = await res.json();
+
+      if (result.success) {
+        setComments((prevComments) => [result.data, ...prevComments]);
+        setNewComment("");
+      } else {
+        console.error("Failed to add comment:", result.message);
+      }
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
 
   if (loading) {
     return (
       <Container>
-        <div className="container mx-auto p-4 max-w-4xl">
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-10 w-3/4 mb-4" />
-              <div className="flex items-center gap-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="flex flex-col gap-2">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-40 w-full mb-6" />
-              <div className="flex gap-2">
-                <Skeleton className="h-6 w-20" />
-                <Skeleton className="h-6 w-20" />
-                <Skeleton className="h-6 w-20" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Skeleton className="h-10 w-32" />
-            </CardFooter>
-          </Card>
+        <div className="container mx-auto p-4 lg:p-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main content skeleton */}
+            <div className="lg:col-span-2">
+              <Skeleton className="h-12 w-3/4 mb-4" />
+              <Skeleton className="h-6 w-1/2 mb-8" />
+              <Skeleton className="h-48 w-full" />
+            </div>
+            {/* Sidebar skeleton */}
+            <div>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center gap-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="flex flex-col gap-2">
+                      <Skeleton className="h-4 w-32" />
+                      <Skeleton className="h-4 w-24" />
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                  <Skeleton className="h-6 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <div className="flex gap-2 mt-4">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-20" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </Container>
     );
@@ -96,11 +116,17 @@ export default function IdeaDetailPage() {
   if (!idea) {
     return (
       <Container>
-        <div className="container mx-auto p-4 max-w-4xl text-center">
-          <h1 className="text-3xl font-bold">Idea Not Found</h1>
-          <p className="text-gray-500 mt-2">
-            The idea you are looking for does not exist or has been removed.
-          </p>
+        <div className="container mx-auto p-4 lg:p-8 text-center">
+          <Card className="max-w-lg mx-auto">
+            <CardHeader>
+              <CardTitle className="text-3xl font-bold">Idea Not Found</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-500 dark:text-gray-400">
+                The idea you are looking for does not exist or has been removed.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </Container>
     );
@@ -114,68 +140,131 @@ export default function IdeaDetailPage() {
 
   return (
     <Container>
-      <div className="container mx-auto p-4 max-w-4xl">
-        <Card className="overflow-hidden shadow-lg">
-          <CardHeader className="bg-gray-50 dark:bg-gray-800 p-6">
-            <Badge variant="secondary" className="w-fit mb-2">{idea.category}</Badge>
-            <CardTitle className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-              {idea.title}
-            </CardTitle>
-            <div className="flex items-center gap-4 pt-4">
-              <Avatar className="h-12 w-12">
-                <AvatarImage
-                  src={`https://api.dicebear.com/6.x/initials/svg?seed=${idea.creator?.username}`}
-                  alt={idea.creator?.username}
-                />
-                <AvatarFallback>
-                  {idea.creator?.username ? idea.creator.username[0].toUpperCase() : "A"}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-lg">{idea.creator?.username || "Anonymous"}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Published on {formattedDate}
-                </p>
-              </div>
+      <div className="container mx-auto p-4 lg:p-8">
+        <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Main Content */}
+          <main className="lg:col-span-2">
+            <div className="mb-6">
+              <Badge variant="secondary" className="mb-2">{idea.category}</Badge>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+                {idea.title}
+              </h1>
             </div>
-          </CardHeader>
-          <CardContent className="p-6">
-            <p className="text-xl leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
-              {idea.description}
-            </p>
+            <div className="prose prose-xl dark:prose-invert max-w-none">
+              <p>{idea.description}</p>
+            </div>
 
-            <div className="flex flex-wrap gap-2">
-              {idea.tags?.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-          <Separator />
-          <CardFooter className="bg-gray-50 dark:bg-gray-800 p-6">
-            <div className="w-full">
-              <h3 className="text-2xl font-bold mb-4">Rate this Idea</h3>
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div className="flex flex-col gap-4">
-                  <StarRating
-                    label="Impact"
-                    value={impactRating}
-                    onChange={setImpactRating}
-                  />
-                  <StarRating
-                    label="Feasibility"
-                    value={feasibilityRating}
-                    onChange={setFeasibilityRating}
-                  />
-                </div>
-                <Button size="lg" className="mt-4 md:mt-0">
-                  Submit Your Vote
-                </Button>
+            <Separator className="my-8" />
+
+            {/* Comments Section */}
+            <div className="space-y-8">
+              <h2 className="text-3xl font-bold flex items-center gap-2">
+                <MessageSquare className="h-8 w-8" />
+                <span>Discussion ({comments?.length || 0})</span>
+              </h2>
+              
+              {/* Add Comment Form */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Leave a Comment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid w-full gap-4">
+                    <Textarea 
+                      placeholder="Type your message here." 
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                    />
+                    <Button onClick={handleAddComment}>Post Comment</Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Comments List */}
+              <div className="space-y-6">
+                {comments?.map((comment) => (
+                  <Card key={comment._id}>
+                    <CardHeader className="flex flex-row items-start gap-4">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={`https://api.dicebear.com/6.x/initials/svg?seed=${comment.createdBy?.username}`} alt={comment.createdBy?.username} />
+                        <AvatarFallback>{comment.createdBy?.username[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <p className="font-semibold">{comment.createdBy?.name || comment.createdBy?.username}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {new Date(comment.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
+                          {comment.text}
+                        </p>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
               </div>
             </div>
-          </CardFooter>
-        </Card>
+          </main>
+
+          {/* Sidebar */}
+          <aside className="space-y-6 lg:mt-0 mt-8">
+            {/* Author Card */}
+            <Card>
+              <CardHeader className="flex flex-row items-center gap-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarImage
+                    src={`https://api.dicebear.com/6.x/initials/svg?seed=${idea.createdBy?.username}`}
+                    alt={idea.createdBy?.username}
+                  />
+                  <AvatarFallback>
+                    {idea.createdBy?.username ? idea.createdBy.username[0].toUpperCase() : <UserCircle />}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-bold text-lg">{idea.createdBy?.name || idea.createdBy?.username || "Anonymous"}</p>
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <CalendarDays className="h-4 w-4" />
+                    <span>{formattedDate}</span>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+
+            {/* Voting Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Was this idea helpful?</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center justify-around gap-4">
+                <Button variant="outline" size="lg" className="flex-1 flex items-center gap-2">
+                  <ThumbsUp />
+                  <span>Yes</span>
+                </Button>
+                <Button variant="outline" size="lg" className="flex-1 flex items-center gap-2">
+                  <ThumbsDown />
+                  <span>No</span>
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Tags Card */}
+            {idea.tags && idea.tags.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Tags</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-wrap gap-2">
+                  {idea.tags.map((tag) => (
+                    <Badge key={tag} variant="outline">
+                      {tag}
+                    </Badge>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+          </aside>
+        </div>
       </div>
     </Container>
   );

@@ -78,7 +78,7 @@ export default function NewIdeaPage() {
                     onChange={(e) => setTitle(e.target.value)}
                     required
                     className="text-lg"
-                  />
+                    />
                 </div>
                 <div className="flex flex-col space-y-2">
                   <Label htmlFor="description">Description</Label>

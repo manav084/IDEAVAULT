@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowUp, Edit, Trash } from "lucide-react";
+import { ArrowDown, ArrowUp, Edit, MessageSquare, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const IdeaCard = ({ idea, showButtons, onEdit, onDelete }) => {
@@ -51,13 +51,17 @@ const IdeaCard = ({ idea, showButtons, onEdit, onDelete }) => {
         onClick={handleTitleClick}
       >
         <CardTitle>{idea.title}</CardTitle>
-        <CardTitle>{idea.createdBy?.username}</CardTitle>
+        <p className="text-sm text-gray-500">by {idea.createdBy?.name || idea.createdBy?.username}</p>
       </CardHeader>
       <CardContent>
-        <p>{idea.description}</p>
+        <p className="truncate">{idea.description}</p>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <div>
+      <CardFooter className="flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
+            <MessageSquare className="h-5 w-5" />
+            <span>{idea.commentCount || 0}</span>
+          </div>
           <p className="text-lg font-bold">
             Votes: {voteObj.likes - voteObj.dislikes}
           </p>

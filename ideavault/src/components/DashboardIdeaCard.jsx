@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
 import { LinearProgress } from "@mui/material";
 
 const DashboardIdeaCard = ({ idea }) => {
@@ -67,6 +67,9 @@ const DashboardIdeaCard = ({ idea }) => {
         <CardTitle className="text-xl font-bold leading-snug">
           {idea.title}
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          by {idea.createdBy?.name || idea.createdBy?.username || "Anonymous"}
+        </p>
       </CardHeader>
       <CardContent className="flex-grow">
         <p className="text-muted-foreground line-clamp-3">
@@ -98,6 +101,10 @@ const DashboardIdeaCard = ({ idea }) => {
             <span className="text-2xl font-bold">{likes - dislikes}</span>
           </div>
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 text-muted-foreground">
+              <MessageSquare className="h-4 w-4" />
+              <span>{idea.commentCount || 0}</span>
+            </div>
             <Button
               size="icon"
               variant="outline"
@@ -118,9 +125,6 @@ const DashboardIdeaCard = ({ idea }) => {
             </Button>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground">
-          Created by @{idea.createdBy?.username || "Anonymous"}
-        </p>
       </CardFooter>
     </Card>
   );

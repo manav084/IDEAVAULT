@@ -13,7 +13,7 @@ export const revalidate = 0;
 
 export async function GET(req) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const userToken = cookieStore.get('token');
 
     if (!userToken) {
