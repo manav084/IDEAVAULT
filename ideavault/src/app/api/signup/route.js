@@ -2,11 +2,12 @@ import dbConnect from "@/lib/mongoose"
 import User from "@/models/User"
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
+import { signupSchema } from "@/lib/validation"
 
 export async function  POST(req) {
     try{
-
-        const {username,name, email, password} = await req.json()
+        const body = await req.json()
+        const {username,name, email, password} = signupSchema.parse(body)
         await dbConnect()
         const verifyUser = await User.findOne({email})
         if(verifyUser){
@@ -21,11 +22,6 @@ export async function  POST(req) {
         }
         const saltNumber = 10
         const hashedPassword = await bcrypt.hash(password,saltNumber)
-        // fetch(`/api/createUser`,{method:"POST",
-        //     headers: {
-            //     "Content-Type": "application/json"},
-            //     body: JSON.stringify({username,name, email, password:hashedPassword})
-            // }).then((data)=>data.json()).then((parseData)=>console.log(parseData.message))
             await User.create({username,name, email, password:hashedPassword})
             return NextResponse.json({
                 success:true,
@@ -36,6 +32,14 @@ export async function  POST(req) {
                 status:200
             })
         }catch(err){
+            if (err.name === 'ZodError') {
+                return NextResponse.json({
+                    success: false,
+                    message: err.issues[0].message
+                }, {
+                    status: 400
+                })
+            }
             console.error(err)
              return NextResponse.json({
                 success:false,

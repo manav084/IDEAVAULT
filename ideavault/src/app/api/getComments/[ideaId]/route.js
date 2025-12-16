@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
   try {
-    const { ideaId } = params;
+    const { ideaId } = await params;
 
     await dbConnect();
 

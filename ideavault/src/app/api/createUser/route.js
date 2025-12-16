@@ -1,10 +1,11 @@
-// import {dbConnect} from '@/lib/mongoose'
 import dbConnect from '@/lib/mongoose'
 import User from '@/models/User';
 import { NextResponse } from 'next/server';
+import { signupSchema } from '@/lib/validation';
 export async function POST(req, res) {
     try{
-        const {username,name, email, password} = await req.json();
+        const body = await req.json();
+        const {username,name, email, password} = signupSchema.parse(body)
         await dbConnect();
         const user = await User.create({username,name, email, password})
 
@@ -15,6 +16,14 @@ export async function POST(req, res) {
         })
 
     }catch(error){
+        if (error.name === 'ZodError') {
+            return NextResponse.json({
+                success: false,
+                message: error.errors[0].message
+            }, {
+                status: 400
+            })
+        }
         console.error(error)
 
         return NextResponse.json({

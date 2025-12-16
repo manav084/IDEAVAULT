@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
+
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [ideas, setIdeas] = useState([]);
@@ -18,14 +19,14 @@ const ProfilePage = () => {
   const fetchUserIdeas = async () => {
     try {
       const res = await fetch("/api/userIdeas");
-      const data = await res.json();
-      if (data.success) {
-        setIdeas(data.data);
-        if (data.data.length > 0) {
-          setUser(data.data[0].createdBy);
+      const resData = await res.json();
+      if (resData.success) {
+        setIdeas(resData.data);
+        if (resData.data.length > 0) {
+          setUser(resData.data[0].createdBy);
         }
       } else {
-        console.error("Failed to fetch user ideas:", data.message);
+        console.error("Failed to fetch user ideas:", resData.message);
         toast.error("Failed to fetch your ideas.");
       }
     } catch (error) {

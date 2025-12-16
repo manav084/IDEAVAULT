@@ -3,6 +3,7 @@ import Comment from "@/models/Comment";
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 import { cookies } from "next/headers";
+import { commentSchema } from "@/lib/validation";
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 
@@ -18,11 +19,8 @@ export async function POST(req) {
     const { payload } = await jose.jwtVerify(userToken.value, secret);
     const userId = payload.userId;
 
-    const { ideaId, text } = await req.json();
-
-    if (!ideaId || !text) {
-      return NextResponse.json({ success: false, message: "Idea ID and comment text are required" }, { status: 400 });
-    }
+    const body = await req.json();
+    const { ideaId, text } = commentSchema.parse(body);
 
     await dbConnect();
 
@@ -43,6 +41,14 @@ export async function POST(req) {
       data: populatedComment,
     });
   } catch (error) {
+    if (error.name === 'ZodError') {
+        return NextResponse.json({
+            success: false,
+            message: error.errors[0].message
+        }, {
+            status: 400
+        })
+    }
     console.error("Error adding comment:", error);
     return NextResponse.json({
       success: false,

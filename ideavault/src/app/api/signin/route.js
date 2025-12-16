@@ -2,15 +2,16 @@ import dbConnect from "@/lib/mongoose"
 import User from "@/models/User"
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
-// import jwt from "jsonwebtoken"
 import {SignJWT} from "jose"
+import { signinSchema } from "@/lib/validation"
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET_KEY
 )
 export async function POST(req){
  try {
-     const {email,password} = await req.json()
+     const body = await req.json()
+     const {email,password} = signinSchema.parse(body)
      await dbConnect()
      const verifyEmail =  await User.findOne({email})
  
@@ -57,6 +58,14 @@ export async function POST(req){
       )
       return res
  } catch (error) {
+    if (error.name === 'ZodError') {
+        return NextResponse.json({
+            success: false,
+            message: error.errors[0].message
+        }, {
+            status: 400
+        })
+    }
     console.error(error)
     return NextResponse.json({
            

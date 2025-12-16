@@ -3,6 +3,7 @@ import Idea from "@/models/Idea";
 import { NextResponse } from "next/server";
 import * as jose from "jose";
 import { cookies } from "next/headers";
+import User from "@/models/User";
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET_KEY
