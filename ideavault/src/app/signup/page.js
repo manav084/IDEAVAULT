@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SignUpPage() {
-  
+  const router = useRouter();
   const [fData, setFData] = useState({
     name: "",
     username:"",
@@ -24,52 +25,45 @@ export default function SignUpPage() {
     confirmPassword: "",
   });
   
-  const [err, seterr] = useState("")
+  const [err, setErr] = useState("")
 
   const handleChange = (e) => {
     setFData({ ...fData, [e.target.id]: e.target.value });
-
   };
 
-
   useEffect(() => {
-    
-  checkPassword()
-    
-  }, [fData.confirmPassword,fData.password])
-  
+    const checkPassword = () => { 
+      if (fData.confirmPassword && fData.confirmPassword !== fData.password) {
+        setErr("Passwords don't match")} 
+      else setErr("")
+    }
+    checkPassword()
+  }, [fData.confirmPassword,fData.password]);
 
-  const checkPassword = () => { 
-    if (fData.confirmPassword && fData.confirmPassword !== fData.password) {
-      seterr("Passwords don't match")} 
-
-      else seterr("")
-   }
-async (params) => {
-  
-}
   const  handleSubmit = async (e) => { 
     e.preventDefault()
-    // console.log(fData);
+    if(err){
+      return
+    }
     try{
-
-    const response =  await fetch(`/api/signup`,{method:"POST",headers:{"Content-Type":"application/json"}, body:JSON.stringify(
-        {
-        "name":fData.name,
-        "username":fData.username,
-        "email":fData.email,
-        "password":fData.password
-        }
-        
-    )})
-    const data =  await response.json()   
-    console.log(data);
-    
-  }catch(error){
-      console.error(error)
-      console.log(error);
-      
-  }
+      const response =  await fetch(`/api/signup`,{method:"POST",headers:{"Content-Type":"application/json"}, body:JSON.stringify(
+          {
+          "name":fData.name,
+          "username":fData.username,
+          "email":fData.email,
+          "password":fData.password
+          }
+      )})
+      const data =  await response.json()   
+      if(!data.success){
+        setErr(data.message)
+      } else {
+        router.push("/signin")
+      }
+    }catch(error){
+        console.error(error)
+        setErr("An unexpected error occurred.")
+    }
   }
 
   return (
@@ -145,12 +139,11 @@ async (params) => {
               </div>
            {err && <p className="text-sm text-destructive">{err}</p>}
 
-
             </div>
         </CardContent>
         <CardFooter className="justify-center pt-6">
           <Button 
-          disabled={err}
+          disabled={!!err}
           className="w-full" >
             Sign Up
           </Button>

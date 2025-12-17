@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { ThumbsUp, ThumbsDown, CalendarDays, UserCircle, MessageSquare } from "lucide-react";
 import Container from "@/components/Container";
 import { Textarea } from "@/components/ui/textarea";
+import { Toaster, toast } from "sonner";
 
 export default function IdeaDetailPage() {
   const { id } = useParams();
@@ -65,11 +66,13 @@ export default function IdeaDetailPage() {
       if (result.success) {
         setComments((prevComments) => [result.data, ...prevComments]);
         setNewComment("");
+        toast.success("Comment added successfully!");
       } else {
-        console.error("Failed to add comment:", result.message);
+        toast.error(result.message || "Failed to add comment.");
       }
     } catch (error) {
       console.error("Error adding comment:", error);
+      toast.error("An error occurred while adding the comment.");
     }
   };
 
@@ -140,6 +143,7 @@ export default function IdeaDetailPage() {
 
   return (
     <Container>
+      <Toaster richColors />
       <div className="container mx-auto p-4 lg:p-8">
         <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Main Content */}

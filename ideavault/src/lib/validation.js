@@ -37,3 +37,5 @@ export const updateIdeaVoteSchema = z.object({
   id: z.string(),
   change: z.enum(['plus', 'minus']),
 });
+
+export const idSchema = z.string().length(24, { message: 'ID must be a 24-character hexadecimal string' });

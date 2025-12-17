@@ -1,10 +1,12 @@
 import dbConnect from "@/lib/mongoose";
 import Idea from "@/models/Idea";
 import { NextResponse } from "next/server";
+import { updateIdeaVoteSchema } from "@/lib/validation";
 
 export async function POST(req) {
   try {
-    const { id, change } = await req.json();
+    const body = await req.json();
+    const { id, change } = updateIdeaVoteSchema.parse(body);
     await dbConnect();
 
     // decide increment field dynamically
@@ -33,6 +35,14 @@ export async function POST(req) {
       message: `Updated ${fieldToUpdate} count successfully`,
     });
   } catch (error) {
+    if (error.name === 'ZodError') {
+        return NextResponse.json({
+            success: false,
+            message: error.issues.map((issue) => issue.message).join(', ')
+        }, {
+            status: 400
+        })
+    }
     console.error(error);
     return NextResponse.json({
       success: false,

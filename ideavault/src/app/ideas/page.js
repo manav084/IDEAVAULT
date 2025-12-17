@@ -41,7 +41,7 @@ const IdeasPage = () => {
               Ideas Dashboard
             </h1>
             <p className="text-muted-foreground mt-1">
-              Browse, vote, and contribute to the community's ideas.
+              Browse, vote, and contribute to the community&#39;s ideas.
             </p>
           </div>
           <Button onClick={() => router.push("/ideas/new")}>

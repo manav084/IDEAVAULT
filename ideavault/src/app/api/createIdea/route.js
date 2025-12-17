@@ -39,7 +39,7 @@ export async function POST(req,res){
         if (error.name === 'ZodError') {
             return NextResponse.json({
                 success: false,
-                message: error.errors[0].message
+                message: error.issues.map((issue) => issue.message).join(', ')
             }, {
                 status: 400
             })
