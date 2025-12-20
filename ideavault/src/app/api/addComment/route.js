@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/mongoose";
 import Comment from "@/models/Comment";
+import Idea from "@/models/Idea";
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
 import { cookies } from "next/headers";
@@ -28,6 +29,10 @@ export async function POST(req) {
       text,
       createdBy: userId,
       idea: ideaId,
+    });
+
+    await Idea.findByIdAndUpdate(ideaId, {
+      $push: { comments: newComment._id },
     });
 
     const populatedComment = await Comment.findById(newComment._id).populate(

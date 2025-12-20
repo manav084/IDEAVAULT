@@ -24,10 +24,12 @@ const ProfilePage = () => {
         setIdeas(resData.data);
         if (resData.data.length > 0) {
           setUser(resData.data[0].createdBy);
+          toast.success("Successfully fetched your ideas.");
+        } else {
+          toast.info("You haven't created any ideas yet.");
         }
       } else {
-        console.error("Failed to fetch user ideas:", resData.message);
-        toast.error("Failed to fetch your ideas.");
+        toast.error(resData.message || "Failed to fetch your ideas.");
       }
     } catch (error) {
       console.error("Error fetching user ideas:", error);

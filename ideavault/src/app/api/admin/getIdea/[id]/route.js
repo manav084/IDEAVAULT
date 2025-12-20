@@ -8,12 +8,14 @@ import { idSchema } from "@/lib/validation";
 export async function GET(req,{params}){
 
 try {
-    const id = idSchema.parse(params.id);
+   const  {id} = await params
+   const parsedId = idSchema.parse(id);
+   console.log(parsedId)
     
     await dbConnect()
-    const data = await Idea.findById(id)
+    const data = await Idea.findById(parsedId)
       .populate("createdBy", "username name")
-      .populate("comments.createdBy", "username name");
+    
 
     return NextResponse.json({success:true,message:"Idea fetched succesfully",data})
 

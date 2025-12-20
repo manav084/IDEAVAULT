@@ -14,6 +14,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import { ModeToggle } from "./ModeToggle"
+import { useAuth } from "@/context/AuthContext"
 
 // const components = [
 //   {
@@ -54,6 +55,7 @@ import { ModeToggle } from "./ModeToggle"
 // ]
 
 export function NavigationMenuDemo() {
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <header className="fixed top-0 w-full bg-background border-b z-50">
@@ -119,26 +121,35 @@ export function NavigationMenuDemo() {
           <NavigationMenuTrigger>Account</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[200px] gap-4">
-              <li>
-                <NavigationMenuLink asChild>
-                  <Link href="/signin" className="flex-row items-center gap-2">
-                    <CircleHelpIcon />
-                    Sign In
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link href="/signup" className="flex-row items-center gap-2">
-                    <CircleIcon />
-                    Sign Up
-                  </Link>
-                </NavigationMenuLink>
-                <NavigationMenuLink asChild>
-                  <Link href="#" className="flex-row items-center gap-2">
-                    <CircleCheckIcon />
-                    Done
-                  </Link>
-                </NavigationMenuLink>
-              </li>
+              {isLoggedIn ? (
+                <li>
+                  <NavigationMenuLink asChild>
+                    <button onClick={logout} className="flex-row items-center gap-2">
+                      <CircleCheckIcon />
+                      Logout
+                    </button>
+                  </NavigationMenuLink>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <NavigationMenuLink asChild>
+                      <Link href="/signin" className="flex-row items-center gap-2">
+                        <CircleHelpIcon />
+                        Sign In
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                  <li>
+                    <NavigationMenuLink asChild>
+                      <Link href="/signup" className="flex-row items-center gap-2">
+                        <CircleIcon />
+                        Sign Up
+                      </Link>
+                    </NavigationMenuLink>
+                  </li>
+                </>
+              )}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
