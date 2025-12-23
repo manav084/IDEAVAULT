@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function SignInPage() {
   const router = useRouter();
+  const { setIsLoggedIn } = useAuth();
   const [fData, setfData] = useState({email:"",password:""})
   const [err, setErr] = useState("")
 
@@ -29,6 +31,7 @@ export default function SignInPage() {
       if(!data.success){
         setErr(data.message)
       } else {
+        setIsLoggedIn(true);
         router.push("/ideas")
       }
     }catch(error){

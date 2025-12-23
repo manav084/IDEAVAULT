@@ -10,8 +10,8 @@ const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
 
 export async function POST(req) {
   try {
-    const cookieStore = cookies();
-    const userToken = cookieStore.get('token');
+    const cookieStore = await cookies();
+    const userToken =  cookieStore.get('token');
 
     if (!userToken) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });

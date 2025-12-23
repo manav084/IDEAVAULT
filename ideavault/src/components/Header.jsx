@@ -54,7 +54,7 @@ import { useAuth } from "@/context/AuthContext"
 //   },
 // ]
 
-export function NavigationMenuDemo() {
+export default function Header() {
   const { isLoggedIn, logout } = useAuth();
 
   return (
@@ -117,67 +117,31 @@ export function NavigationMenuDemo() {
             <Link href="/leaderboard">Leaderboard</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem className="hidden md:block">
-          <NavigationMenuTrigger>Account</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[200px] gap-4">
-              {isLoggedIn ? (
-                <li>
-                  <NavigationMenuLink asChild>
-                    <button onClick={logout} className="flex-row items-center gap-2">
-                      <CircleCheckIcon />
-                      Logout
-                    </button>
-                  </NavigationMenuLink>
-                </li>
-              ) : (
-                <>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link href="/signin" className="flex-row items-center gap-2">
-                        <CircleHelpIcon />
-                        Sign In
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                  <li>
-                    <NavigationMenuLink asChild>
-                      <Link href="/signup" className="flex-row items-center gap-2">
-                        <CircleIcon />
-                        Sign Up
-                      </Link>
-                    </NavigationMenuLink>
-                  </li>
-                </>
-              )}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+        {isLoggedIn ? (
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+              <button onClick={logout}>Logout</button>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        ) : (
+          <>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                <Link href="/signin">Sign In</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                <Link href="/signup">Sign Up</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </>
+        )}
         <NavigationMenuItem>
           <ModeToggle/>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
 </header>
-  )
-}
-
-function ListItem({
-  title,
-  children,
-  href,
-  ...props
-}) {
-  return (
-    <li {...props}>
-      <NavigationMenuLink asChild>
-        <Link href={href}>
-          <div className="text-sm leading-none font-medium">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-            {children}
-          </p>
-        </Link>
-      </NavigationMenuLink>
-    </li>
   )
 }

@@ -1,6 +1,8 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+
+import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,12 +21,21 @@ import Container from "@/components/Container";
 import { Loader2 } from "lucide-react";
 
 export default function NewIdeaPage() {
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [tags, setTags] = useState("");
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+
+
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      toast.error("You must be logged in to create an idea.");
+      router.push("/");
+    }
+  }, [isLoggedIn, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,6 +65,17 @@ export default function NewIdeaPage() {
       setLoading(false);
     }
   };
+
+  if (isLoggedIn === null || isLoggedIn === false) {
+    return (
+      <Container>
+        <Toaster richColors />
+        <div className="flex justify-center items-center py-12">
+          <Loader2 className="mr-2 h-16 w-16 animate-spin" />
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container>
