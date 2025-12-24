@@ -32,15 +32,19 @@ export async function GET(req) {
             },
             {
                 $project: {
+                    _id: 1,
                     title: 1,
                     description: 1,
                     category: 1,
                     tags: 1,
                     likes: 1,
                     dislikes: 1,
+                    likedBy: 1,
+                    dislikedBy: 1,
                     createdAt: 1,
                     updatedAt: 1,
                     commentCount: 1,
+                    "createdBy._id": 1,
                     "createdBy.username": 1,
                     "createdBy.name": 1,
                 }

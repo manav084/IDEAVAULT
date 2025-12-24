@@ -34,7 +34,7 @@ export default function EditIdeaPage() {
     if (id) {
       const fetchIdea = async () => {
         try {
-          const res = await fetch(`/api/admin/getIdea/${id}`);
+          const res = await fetch(`/api/getIdea/${id}`);
           const data = await res.json();
           if (data.success) {
             const ideaData = data.data;

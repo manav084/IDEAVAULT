@@ -19,7 +19,7 @@ const LeaderboardPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const respData = await fetch("/api/admin/getIdeas");
+        const respData = await fetch("/api/getIdeas");
         const parsedData = await respData.json();
         const sortedIdeas = (parsedData.data || []).sort(
           (a, b) => (b.likes || 0) - (a.likes || 0)

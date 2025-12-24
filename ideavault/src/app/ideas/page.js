@@ -15,7 +15,7 @@ const IdeasPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const respData = await fetch("/api/admin/getIdeas");
+        const respData = await fetch("/api/getIdeas");
         const parsedData = await respData.json();
         // Sort by most recently created
         const sortedIdeas = (parsedData.data || []).sort(

@@ -30,7 +30,7 @@ export default function IdeaDetailPage() {
       const fetchIdeaAndComments = async () => {
         try {
           // Fetch idea
-          const ideaRes = await fetch(`/api/admin/getIdea/${id}`);
+          const ideaRes = await fetch(`/api/getIdea/${id}`);
           const ideaData = await ideaRes.json();
           setIdea(ideaData.data);
 
